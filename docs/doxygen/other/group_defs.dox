@@ -1,0 +1,7 @@
+/*!
+ * \defgroup block GNU Radio NFM_ARCHIVE C++ Signal Processing Blocks
+ * \brief All C++ blocks that can be used from the NFM_ARCHIVE GNU Radio
+ *        module are listed here or in the subcategories below.
+ *
+ */
+
