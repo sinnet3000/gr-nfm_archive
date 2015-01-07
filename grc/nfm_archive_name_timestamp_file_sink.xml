@@ -9,7 +9,7 @@
   <key>nfm_archive_name_timestamp_file_sink</key>
   <category>nfm_archive</category>
   <import>import nfm_archive</import>
-  <make>nfm_archive.name_timestamp_file_sink()</make>
+  <make>nfm_archive.name_timestamp_file_sink($type.size*$vlen, $samp_rate)</make>
 	<param>
 		<name>Input Type</name>
 		<key>type</key>
