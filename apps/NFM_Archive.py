@@ -14,6 +14,7 @@ from gnuradio.fft import window
 from gnuradio.filter import firdes
 from optparse import OptionParser
 import osmosdr
+import nfm_archive
 
 class my_top_block(gr.top_block):
 
@@ -65,7 +66,7 @@ class my_top_block(gr.top_block):
         for freq in freqs:
 		fir_filters.append(filter.freq_xlating_fir_filter_ccc(int(samp_rate/target_rate), (firdes_tap), -(capture_freq-freq), samp_rate))
 
-                file_sinks.append(blocks.tagged_file_sink(gr.sizeof_float*1, 48000))
+                file_sinks.append(nfm_archive.name_timestamp_file_sink(gr.sizeof_float*1, 48000))
                 multiply_consts.append(blocks.multiply_const_vff((2**16, )))
                 float_shorts.append(blocks.float_to_short(1, 1))
                 complex_magsqs.append(blocks.complex_to_mag_squared(1))
