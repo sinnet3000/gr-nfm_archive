@@ -54,7 +54,7 @@ namespace gr {
     name_timestamp_file_sink::make(size_t itemsize, double samp_rate, const char *channel_name)
     {
       return gnuradio::get_initial_sptr
-        (new name_timestamp_file_sink_impl(itemsize, samp_rate));
+        (new name_timestamp_file_sink_impl(itemsize, samp_rate, channel_name));
     }
 
     name_timestamp_file_sink_impl::name_timestamp_file_sink_impl(size_t itemsize, double samp_rate, const char *channel_name)
