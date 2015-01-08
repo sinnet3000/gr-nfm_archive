@@ -58,7 +58,7 @@ namespace gr {
        * \param samp_rate The sample rate used to determine the time
        *                  difference between bursts
        */
-      static sptr make(size_t itemsize, double samp_rate);
+      static sptr make(size_t itemsize, double samp_rate, const char *channel_name);
     };
 
   } /* namespace blocks */

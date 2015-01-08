@@ -51,13 +51,13 @@ namespace gr {
   namespace nfm_archive {
 
     name_timestamp_file_sink::sptr
-    name_timestamp_file_sink::make(size_t itemsize, double samp_rate)
+    name_timestamp_file_sink::make(size_t itemsize, double samp_rate, const char *channel_name)
     {
       return gnuradio::get_initial_sptr
         (new name_timestamp_file_sink_impl(itemsize, samp_rate));
     }
 
-    name_timestamp_file_sink_impl::name_timestamp_file_sink_impl(size_t itemsize, double samp_rate)
+    name_timestamp_file_sink_impl::name_timestamp_file_sink_impl(size_t itemsize, double samp_rate, const char *channel_name)
       : gr::sync_block("name_timestamp_file_sink",
 		      io_signature::make(1, 1, itemsize),
 		      io_signature::make(0, 0, 0)),
@@ -156,7 +156,7 @@ namespace gr {
 	      std::stringstream filename;
 	      filename.setf(std::ios::fixed, std::ios::floatfield);
 	      filename.precision(8);
-	      filename << "file" << unique_id() << "_" << d_n << "_" << d_timeval << ".dat";
+	      filename << channel_name << " - " << unique_id() << "_" << d_n << "_" << d_timeval << ".dat";
 	      d_n++;
 
 	      int fd;

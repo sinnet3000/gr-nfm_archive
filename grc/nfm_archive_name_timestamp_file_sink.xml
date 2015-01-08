@@ -10,8 +10,14 @@
   <category>nfm_archive</category>
   <import>import nfm_archive</import>
   <import>from gnuradio import blocks</import>
-  <make>nfm_archive.name_timestamp_file_sink($type.size*$vlen, $samp_rate)</make>
-	<param>
+  <make>nfm_archive.name_timestamp_file_sink($type.size*$vlen, $samp_rate, $channel_name)</make>
+		<param>
+		<name>Channel Name</name>
+		<key>channel_name</key>
+		<value>Channel Name Example</value>
+		<type>string</type>
+		</param>
+		<param>
 		<name>Input Type</name>
 		<key>type</key>
 		<type>enum</type>
