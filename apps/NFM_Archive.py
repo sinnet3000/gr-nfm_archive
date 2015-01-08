@@ -30,7 +30,7 @@ class my_top_block(gr.top_block):
 
         self.freqs = freqs = [462.5625e6, 462.5875e6, 462.6125e6] # Channel 1, 2, 3 FRS
         
-        self.freqs_names = freqs_names = ["Channel 1", "Channel 3"]
+        self.freqs_names = freqs_names = ["Channel 1", "Channel 2", "Channel 3"]
 
         self.capture_freq = capture_freq = ( max(freqs) + min(freqs) ) / 2
 
@@ -66,7 +66,7 @@ class my_top_block(gr.top_block):
         for freq in freqs:
 		fir_filters.append(filter.freq_xlating_fir_filter_ccc(int(samp_rate/target_rate), (firdes_tap), -(capture_freq-freq), samp_rate))
 
-                file_sinks.append(nfm_archive.name_timestamp_file_sink(gr.sizeof_float*1, 48000, "Test"))
+                file_sinks.append(nfm_archive.name_timestamp_file_sink(gr.sizeof_float*1, 48000, freqs_names[freqs.index(freq)]))
                 multiply_consts.append(blocks.multiply_const_vff((2**16, )))
                 float_shorts.append(blocks.float_to_short(1, 1))
                 complex_magsqs.append(blocks.complex_to_mag_squared(1))
