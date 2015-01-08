@@ -60,8 +60,8 @@ namespace gr {
     name_timestamp_file_sink_impl::name_timestamp_file_sink_impl(size_t itemsize, double samp_rate, const char *channel_name)
       : gr::sync_block("name_timestamp_file_sink",
 		      io_signature::make(1, 1, itemsize),
-		      io_signature::make(0, 0, 0)),
-	d_itemsize (itemsize), d_n(0), d_sample_rate(samp_rate)
+		      io_signature::make(0, 0, 0)), 
+	d_itemsize (itemsize), d_n(0), d_channel_name(channel_name)
     {
       d_state = NOT_IN_BURST;
       d_last_N = 0;
@@ -156,7 +156,7 @@ namespace gr {
 	      std::stringstream filename;
 	      filename.setf(std::ios::fixed, std::ios::floatfield);
 	      filename.precision(8);
-	      filename << channel_name << " - " << unique_id() << "_" << d_n << "_" << d_timeval << ".dat";
+	      filename << d_channel_name << " - " << unique_id() << "_" << d_n << "_" << d_timeval << ".dat";
 	      d_n++;
 
 	      int fd;

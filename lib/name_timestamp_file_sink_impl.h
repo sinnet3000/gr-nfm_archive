@@ -42,6 +42,7 @@ namespace gr {
       double   d_sample_rate;
       uint64_t d_last_N;
       double   d_timeval;
+      const char *d_channel_name
 
     public:
       name_timestamp_file_sink_impl(size_t itemsize, double samp_rate, const char *channel_name);
