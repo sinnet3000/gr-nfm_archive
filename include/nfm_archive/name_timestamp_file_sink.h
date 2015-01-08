@@ -45,7 +45,7 @@ namespace gr {
      * found, the new time is calculated based off the sample rate of
      * the block.
      */
-    class name_timestamp_file_sink : virtual public sync_block
+    class name_timestamp_file_sink : virtual public gr::sync_block
     {
     public:
       // gr::blocks::tagged_file_sink::sptr
