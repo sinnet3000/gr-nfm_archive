@@ -26,7 +26,7 @@ class my_top_block(gr.top_block):
         ##################################################
         self.samp_rate = samp_rate = 10e6
         self.target_rate = target_rate = 48000
-        self.firdes_tap = firdes_tap = firdes.low_pass(1, samp_rate, 2000, 30000, firdes.WIN_HAMMING, 6.76)
+        self.firdes_tap = firdes_tap = firdes.low_pass(1, samp_rate, 2000, 10000, firdes.WIN_HAMMING, 6.76)
 
         self.freqs = freqs = [462.5625e6, 462.5875e6, 462.6125e6] # Channel 1, 2, 3 FRS
         
@@ -71,7 +71,7 @@ class my_top_block(gr.top_block):
                 float_shorts.append(blocks.float_to_short(1, 1))
                 complex_magsqs.append(blocks.complex_to_mag_squared(1))
                 burst_taggers.append(blocks.burst_tagger(gr.sizeof_float))
-                pwr_squelchs.append(analog.pwr_squelch_cc(-20, .001, 1, False))
+                pwr_squelchs.append(analog.pwr_squelch_cc(-40, .001, 1, False))
                 nbfm_rxs.append(analog.nbfm_rx(
         	audio_rate=48000,
         	quad_rate=48000,
