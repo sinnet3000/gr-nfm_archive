@@ -58,7 +58,7 @@ namespace gr {
     }
 
     name_timestamp_file_sink_impl::name_timestamp_file_sink_impl(size_t itemsize, double samp_rate)
-      : sync_block("name_timestamp_file_sink",
+      : gr::sync_block("name_timestamp_file_sink",
 		      io_signature::make(1, 1, itemsize),
 		      io_signature::make(0, 0, 0)),
 	d_itemsize (itemsize), d_n(0), d_sample_rate(samp_rate)
