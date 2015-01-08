@@ -45,7 +45,7 @@ namespace gr {
       const char *d_channel_name
 
     public:
-      name_timestamp_file_sink_impl(size_t itemsize, double samp_rate);
+      name_timestamp_file_sink_impl(size_t itemsize, double samp_rate, const char *channel_name);
       ~name_timestamp_file_sink_impl();
 
       int work(int noutput_items,

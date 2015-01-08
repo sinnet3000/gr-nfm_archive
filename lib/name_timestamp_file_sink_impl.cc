@@ -156,7 +156,7 @@ namespace gr {
 	      std::stringstream filename;
 	      filename.setf(std::ios::fixed, std::ios::floatfield);
 	      filename.precision(8);
-	      filename << channel_name << " - " << unique_id() << "_" << d_n << "_" << d_timeval << ".dat";
+	      filename << d_channel_name << " - " << unique_id() << "_" << d_n << "_" << d_timeval << ".dat";
 	      d_n++;
 
 	      int fd;
