@@ -156,7 +156,15 @@ namespace gr {
 	      std::stringstream filename;
 	      filename.setf(std::ios::fixed, std::ios::floatfield);
 	      filename.precision(8);
-	      filename << d_channel_name << " - " << unique_id() << "_" << d_n << "_" << d_timeval << ".dat";
+
+              // get date and time
+                 time_t timer;
+                 struct tm* tm_info;
+                 time(&timer);
+                 tm_info = localtime(&timer);
+                 strftime(d_timestamp, 25, "%Y:%m:%d%H:%M:%S", tm_info);
+
+	      filename << d_channel_name << " - " << d_timestamp << ".dat";
 	      d_n++;
 
 	      int fd;

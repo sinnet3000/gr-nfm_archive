@@ -34,7 +34,7 @@ class my_top_block(gr.top_block):
         
         self.freqs_names = freqs_names = ["FRS 1", "Megacable" ]
 
-        self.squelch_settings = squelch_settings = [-50, -50]
+        self.squelch_settings = squelch_settings = [-30, -50]
 
         self.capture_freq = capture_freq = ( max(freqs) + min(freqs) ) / 2
 
