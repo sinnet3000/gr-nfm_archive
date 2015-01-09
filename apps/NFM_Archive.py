@@ -16,6 +16,8 @@ from optparse import OptionParser
 import osmosdr
 import nfm_archive
 
+
+
 class my_top_block(gr.top_block):
 
     def __init__(self):
@@ -26,11 +28,13 @@ class my_top_block(gr.top_block):
         ##################################################
         self.samp_rate = samp_rate = 10e6
         self.target_rate = target_rate = 48000
-        self.firdes_tap = firdes_tap = firdes.low_pass(1, samp_rate, 2000, 10000, firdes.WIN_HAMMING, 6.76)
+        self.firdes_tap = firdes_tap = firdes.low_pass(1, samp_rate, 2000, 17000, firdes.WIN_HAMMING, 6.76)
 
-        self.freqs = freqs = [462.5625e6, 462.5875e6, 462.6125e6] # Channel 1, 2, 3 FRS
+        self.freqs = freqs = [462.5625e6, 463.650e6] 
         
-        self.freqs_names = freqs_names = ["Channel 1", "Channel 2", "Channel 3"]
+        self.freqs_names = freqs_names = ["FRS 1", "Megacable" ]
+
+        self.squelch_settings = squelch_settings = [-50, -50]
 
         self.capture_freq = capture_freq = ( max(freqs) + min(freqs) ) / 2
 
@@ -45,8 +49,8 @@ class my_top_block(gr.top_block):
         self.osmosdr_source_0.set_iq_balance_mode(0, 0)
         self.osmosdr_source_0.set_gain_mode(True, 0)
         self.osmosdr_source_0.set_gain(10, 0)
-        self.osmosdr_source_0.set_if_gain(0, 0)
-        self.osmosdr_source_0.set_bb_gain(0, 0)
+        self.osmosdr_source_0.set_if_gain(20, 0)
+        self.osmosdr_source_0.set_bb_gain(20, 0)
         self.osmosdr_source_0.set_antenna("", 0)
         self.osmosdr_source_0.set_bandwidth(0, 0)
           
@@ -60,9 +64,7 @@ class my_top_block(gr.top_block):
         complex_magsqs = []
         burst_taggers = []
         iir_filters = []
-        burst_settings = []
-        
-        count = 0
+
         for freq in freqs:
 		fir_filters.append(filter.freq_xlating_fir_filter_ccc(int(samp_rate/target_rate), (firdes_tap), -(capture_freq-freq), samp_rate))
 
@@ -71,14 +73,13 @@ class my_top_block(gr.top_block):
                 float_shorts.append(blocks.float_to_short(1, 1))
                 complex_magsqs.append(blocks.complex_to_mag_squared(1))
                 burst_taggers.append(blocks.burst_tagger(gr.sizeof_float))
-                pwr_squelchs.append(analog.pwr_squelch_cc(-40, .001, 1, False))
+                pwr_squelchs.append(analog.pwr_squelch_cc(squelch_settings[freqs.index(freq)], .001, 0, False))
                 nbfm_rxs.append(analog.nbfm_rx(
         	audio_rate=48000,
         	quad_rate=48000,
         	tau=75e-6,
         	max_dev=5e3,))
                 iir_filters.append(filter.single_pole_iir_filter_ff(.001, 1))
-                count += 1
 
 	for tagger in burst_taggers:
 		tagger.set_true_tag("burst",True)
@@ -89,7 +90,7 @@ class my_top_block(gr.top_block):
         # Connections
         ##################################################
 
-        for index in range(0, len(freqs)-1):
+        for index in range(0, len(freqs)):
         	self.connect((nbfm_rxs[index], 0), (burst_taggers[index], 0))
                 self.connect((pwr_squelchs[index], 0), (nbfm_rxs[index], 0))
                 self.connect((pwr_squelchs[index], 0), (complex_magsqs[index], 0))
