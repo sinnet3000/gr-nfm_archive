@@ -162,7 +162,7 @@ namespace gr {
                  struct tm* tm_info;
                  time(&timer);
                  tm_info = localtime(&timer);
-                 strftime(d_timestamp, 25, "%Y:%m:%d%H:%M:%S", tm_info);
+                 strftime(d_timestamp, 25, "%Y:%m:%d.%H:%M:%S", tm_info);
 
 	      filename << d_channel_name << " - " << d_timestamp << ".dat";
 	      d_n++;
