@@ -27,14 +27,15 @@ class my_top_block(gr.top_block):
         # Variables
         ##################################################
         self.samp_rate = samp_rate = 10e6
-        self.target_rate = target_rate = 48000
-        self.firdes_tap = firdes_tap = firdes.low_pass(1, samp_rate, 2000, 17000, firdes.WIN_HAMMING, 6.76)
+        self.target_rate = target_rate = 8000
+        self.firdes_tap = firdes_tap = firdes.low_pass(1, samp_rate, 12000, 20000, firdes.WIN_HAMMING, 6.76)
 
-        self.freqs = freqs = [462.5625e6, 463.650e6] 
-        
-        self.freqs_names = freqs_names = ["FRS 1", "Megacable" ]
+        self.freqs = freqs = [460.35000e6, 460.45000e6, 460.22500e6, 460.40000e6, 460.50000e6, 460.17500e6, 460.30000e6, 460.12500e6
+]#, 460.07500e6, 460.25000e6]#, 460.05000e6]#, 460.15000e6, 460.27500e6 ] 
 
-        self.squelch_settings = squelch_settings = [-30, -50]
+        self.freqs_names = freqs_names = ["BPD CW 1", "BPD A1-A7", "BPD B2-B3", "BPD E5-13-18", "BPD D4-D14", "BPD C6-C11", "BPD TA 7", "BPD List 8"]#, "BPD TA 9", "BPD CMD 10"]#, "BPD SOps 12"]#, "BPD Detc 13", "BPD IA 14" ]
+
+        self.squelch_settings = squelch_settings = [-75] * 8
 
         self.capture_freq = capture_freq = ( max(freqs) + min(freqs) ) / 2
 
@@ -48,9 +49,9 @@ class my_top_block(gr.top_block):
         self.osmosdr_source_0.set_dc_offset_mode(0, 0)
         self.osmosdr_source_0.set_iq_balance_mode(0, 0)
         self.osmosdr_source_0.set_gain_mode(True, 0)
-        self.osmosdr_source_0.set_gain(10, 0)
-        self.osmosdr_source_0.set_if_gain(20, 0)
-        self.osmosdr_source_0.set_bb_gain(20, 0)
+        self.osmosdr_source_0.set_gain(7, 0)
+        self.osmosdr_source_0.set_if_gain(10, 0)
+        self.osmosdr_source_0.set_bb_gain(7, 0)
         self.osmosdr_source_0.set_antenna("", 0)
         self.osmosdr_source_0.set_bandwidth(0, 0)
           
@@ -68,15 +69,15 @@ class my_top_block(gr.top_block):
         for freq in freqs:
 		fir_filters.append(filter.freq_xlating_fir_filter_ccc(int(samp_rate/target_rate), (firdes_tap), -(capture_freq-freq), samp_rate))
 
-                file_sinks.append(nfm_archive.name_timestamp_file_sink(gr.sizeof_float*1, 48000, freqs_names[freqs.index(freq)]))
+                file_sinks.append(nfm_archive.name_timestamp_file_sink(gr.sizeof_float*1, 8000, freqs_names[freqs.index(freq)]))
                 multiply_consts.append(blocks.multiply_const_vff((2**16, )))
                 float_shorts.append(blocks.float_to_short(1, 1))
                 complex_magsqs.append(blocks.complex_to_mag_squared(1))
                 burst_taggers.append(blocks.burst_tagger(gr.sizeof_float))
                 pwr_squelchs.append(analog.pwr_squelch_cc(squelch_settings[freqs.index(freq)], .001, 0, False))
                 nbfm_rxs.append(analog.nbfm_rx(
-        	audio_rate=48000,
-        	quad_rate=48000,
+        	audio_rate=8000,
+        	quad_rate=8000,
         	tau=75e-6,
         	max_dev=5e3,))
                 iir_filters.append(filter.single_pole_iir_filter_ff(.001, 1))
